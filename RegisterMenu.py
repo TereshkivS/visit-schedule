@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(object):
+class Ui_RegisterWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(620, 492)
@@ -119,6 +119,9 @@ class Ui_MainWindow(object):
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
+        #connect to slots
+        self.registerButton.clicked.connect()
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -151,7 +154,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_RegisterWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

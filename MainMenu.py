@@ -10,10 +10,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import cv2
 import os
 
+from RegisterMenu import Ui_RegisterWindow
+
+
 class Ui_MainWindow(object):
 
-
     def setupUi(self, MainWindow):
+        #standart settings
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(618, 479)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -55,7 +58,7 @@ class Ui_MainWindow(object):
 
         # connect to slots
         self.monitoringButton.clicked.connect(self.StartMonitoring)
-        self.registerButton.clicked.connect(self.StartRegisterStudent)
+        self.registerButton.clicked.connect(self.OpenRegisterStudentWindow)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -80,7 +83,12 @@ class Ui_MainWindow(object):
                 cv2.destroyAllWindows()
                 break
 
-    def __init__(self):
+    def OpenRegisterStudentWindow(self):
+        self.registerWindow = QtWidgets.QMainWindow()
+        self.registerWindowUI = Ui_RegisterWindow()
+        self.registerWindowUI.setupUi(self.registerWindow)
+        self.registerWindow.show()
+        #MainWindow.setDisabled(True)
 
 
 
