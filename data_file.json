@@ -1,0 +1,15 @@
+[
+    {
+        "__class__": "Student",
+        "__module__": "Student",
+        "age": "q",
+        "educationalLevel": "Master",
+        "gpa": "q",
+        "group": "q",
+        "institute": "q",
+        "name": "q",
+        "pid": "ba72a50d-f11e-4c20-812c-8de31874c10a",
+        "profession": "q",
+        "surname": "q"
+    }
+]

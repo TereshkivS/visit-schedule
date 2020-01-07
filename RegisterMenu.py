@@ -7,6 +7,10 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from RegisterMenuManager import RegisterMenuManager
+from Student import Student
+import uuid
+
 
 class Ui_RegisterWindow(object):
     def setupUi(self, MainWindow):
@@ -107,6 +111,11 @@ class Ui_RegisterWindow(object):
         self.registerButton = QtWidgets.QPushButton(self.centralwidget)
         self.registerButton.setObjectName("registerButton")
         self.verticalLayout_2.addWidget(self.registerButton)
+
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setObjectName("label_10")
+        self.verticalLayout_2.addWidget(self.label_10)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 620, 22))
@@ -119,8 +128,8 @@ class Ui_RegisterWindow(object):
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
-        #connect to slots
-        self.registerButton.clicked.connect()
+        # connect to slots
+        self.registerButton.clicked.connect(self.Register)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -148,14 +157,30 @@ class Ui_RegisterWindow(object):
         self.gpaLine.setPlaceholderText(_translate("MainWindow", "e.g. 82.5"))
         self.registerButton.setText(_translate("MainWindow", "Register"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
+        self.label_10.setText(_translate("MainWindow", "*after press Register button, it will be taken photo\nSmile:)"))
+
+    def Register(self):
+        student = Student(name=self.firstNameLine.text(),
+                          surname=self.secondNameLine.text(),
+                          pid=str(uuid.uuid4()),
+                          institute=self.instituteLine.text(),
+                          profession=self.professionLine.text(),
+                          group=self.groupLine.text(),
+                          educationalLevel=self.edLevelComboBox.currentText(),
+                          age=self.ageLine.text(),
+                          gpa=self.gpaLine.text())
+        # TODO maybe move next line to ctor
+        manager = RegisterMenuManager(student)
+        manager.RegisterInDataBase()
+        manager.TakeAPhoto()
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_RegisterWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
