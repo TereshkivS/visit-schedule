@@ -21,6 +21,11 @@ class DataBaseProcessor():
             listofstudents=json.loads(read_from_json_file.read(), object_hook=dict_to_obj)
             print(listofstudents)
             print(type(listofstudents))
+            # TODO insert in current id code
+            matches = [x for x in listofstudents if x.getSurname() == "koko"].pop()
+            print(matches.getName())
+
+            return listofstudents
 
 def convert_to_dict(obj):
     obj_dict = {

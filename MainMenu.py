@@ -7,8 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import cv2
-import os
+import OpenCvManager
 
 from RegisterMenu import Ui_RegisterWindow
 
@@ -74,14 +73,8 @@ class Ui_MainWindow(object):
 
     # TODO add some code
     def StartMonitoring(self):
-        cap = cv2.VideoCapture(0)
-        while(True):
-            ret, frame = cap.read()
-            cv2.imshow('Video', frame)
-
-            if cv2.waitKey(20) & 0xFF == ord('q'):
-                cv2.destroyAllWindows()
-                break
+        monitoring = OpenCvManager.OpenCvManager()
+        monitoring.StartMonitoring()
 
     def OpenRegisterStudentWindow(self):
         self.registerWindow = QtWidgets.QMainWindow()
