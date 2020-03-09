@@ -84,7 +84,8 @@ class OpenCvManager:
         # dictionary " name : id "
         label_ids = self.LoadNameLabels()
         print(label_ids)
-        listOfStudents = dataBase.DeserializeDataBase()
+        listOfStudents = dataBase.listOfStudent
+        #listOfStudents = dataBase.DeserializeDataBase()
         # 2 dimential array of detected faces
         x_train = []
         y_labels = []
@@ -126,9 +127,13 @@ class OpenCvManager:
 
     def GetUuidByName(self, label, listofstudents):
         # todo hanle if is not matches
-        matches = next(item for item in listofstudents if item["name"].lower() + item["surname"].lower() == label)
-        print("Matches = " + matches["pid"])
-        return matches["pid"]
+        for x in listofstudents:
+            if x.name.lower() + x.surname.lower() == label:
+                return x.pid
+        # matches = next(item for item in listofstudents if item["name"].lower() + item["surname"].lower() == label)
+        # print("Matches = " + matches["pid"])
+        print("GetUuidByName crashed because it was no same label in list of students")
+        return 0
 
     def TakeAPhoto(self, folderPath):
         cam = VideoCapture(0, cv2.CAP_DSHOW)  # 0 -> index of camera

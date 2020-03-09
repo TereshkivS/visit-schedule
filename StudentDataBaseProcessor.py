@@ -4,7 +4,16 @@ import Student
 
 class DataBaseProcessor():
     def __init__(self):
-        self.listOfStudent = []
+        try:
+            self.listOfStudent = self.DeserializeDataBase()
+            print("Deserialization was done in StudentDataBaseProcessor")
+        except:
+            self.listOfStudent = []
+            print("Create empty lists of students")
+
+    def __del__(self):
+        self.SerializeDataBase()
+        print("Serialization was done in StudentDataBaseProcessor")
 
 
     def AppendStudent(self, student):
@@ -38,4 +47,21 @@ class DataBaseProcessor():
     def DeserializeDataBase(self):
         with open("data_file.json", "r") as read_from_json_file:
             listofstudents = json.loads(read_from_json_file.read())
-            return listofstudents
+            return self.ConvertInListOfStudentsFromDict(listofstudents)
+
+    def ConvertInListOfStudentsFromDict(self, listOfDictionaries):
+        listOfStudents = []
+        matches = next(item for item in listOfDictionaries)
+        for each in listOfDictionaries:
+            student = Student.Student(name=each["name"],
+                              surname=each["surname"],
+                              pid=each["pid"],
+                              institute=each["institute"],
+                              profession=each["profession"],
+                              group=each["group"],
+                              educationalLevel=each["educationalLevel"],
+                              age=each["age"],
+                              gpa=each["gpa"])
+            listOfStudents.append(student)
+            print(student)
+        return listOfStudents

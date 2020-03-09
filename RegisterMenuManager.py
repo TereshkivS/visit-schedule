@@ -14,7 +14,7 @@ class RegisterMenuManager:
     def RegisterInDataBase(self, OpenCvManager, student):
         # Add in list of students
         self.__dbproccessor.AppendStudent(student)
-        self.__dbproccessor.AppendDataBase()
+        #self.__dbproccessor.AppendDataBase()
         OpenCvManager.TrainPhotos(self.__dbproccessor)
 
     def GetFolderPath(self):
