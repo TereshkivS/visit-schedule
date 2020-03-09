@@ -1,7 +1,8 @@
 import cv2
+from cv2 import *
 import pickle
 import os
-import StudentDataBaseProcessor
+import uuid
 
 import numpy
 from PIL import Image
@@ -16,10 +17,13 @@ class OpenCvManager:
         self.IMAGES_DIR = os.path.join(self.BASE_DIR, 'images')  # directory of images
 
     def LoadNameLabels(self):
-        labels = {}
-        with open("labels.pickle", 'rb') as f:
-            og_labels = pickle.load(f)
-            return og_labels
+        try:
+            with open("labels.pickle", 'rb') as f:
+                og_labels = pickle.load(f)
+                return og_labels
+        except IOError:
+            labels = {}
+            return labels
 
 
     def ReverseLabels(self, og_labels):
@@ -37,7 +41,7 @@ class OpenCvManager:
         cap = cv2.VideoCapture(0)
         recognizer = self.CreateRecognizer()
         self.ReadFromFileToRecognizer(recognizer)
-        while (True):
+        while True:
             ret, frame = cap.read()
             # convert frame to gray color
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -75,12 +79,12 @@ class OpenCvManager:
         stroke = 2
         cv2.putText(frame, name, (x,y), font, 1, color, stroke, cv2.LINE_AA)
 
-    def TrainPhotos(self):
+    def TrainPhotos(self, dataBase):
         recognizer = self.CreateRecognizer()
-        current_id = 0
         # dictionary " name : id "
         label_ids = self.LoadNameLabels()
-        # import data from json
+        print(label_ids)
+        listOfStudents = dataBase.DeserializeDataBase()
         # 2 dimential array of detected faces
         x_train = []
         y_labels = []
@@ -90,23 +94,22 @@ class OpenCvManager:
                     path = os.path.join(root, file)
                     label = os.path.basename(root).replace(" ", "_").lower()
                     if not label in label_ids:
-                        # search by label(name) in json data and replace
+                        clearstruui = self.GetUuidByName(label, listOfStudents).replace('-', '')
+                        current_id = int(clearstruui, base=16)
+                        print(current_id)
                         label_ids[label] = current_id
-                        current_id = current_id + 1
                     # set current id
                     id_ = label_ids[label]
                     # some numbers of persons
-                    # y_labels.append(label)
-                    # x_train.append(path)
                     pil_image = Image.open(path).convert("L")  # grayscale
                     # convert to array of numpy
                     image_array = numpy.array(pil_image, "uint8")
-                    # print(image_array)
                     # detect faces on the frame
                     faces = self.face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=5)
 
                     for x, y, w, h in faces:
                         # region of interests
+                        print("Faces was found")
                         roi = image_array[y:y + h, x:x + w]
                         # face
                         x_train.append(roi)
@@ -121,4 +124,26 @@ class OpenCvManager:
         recognizer.train(x_train, numpy.array(y_labels))
         recognizer.save("train.yml")
 
+    def GetUuidByName(self, label, listofstudents):
+        matches = [x for x in listofstudents if (x.getName().lower() + x.getSurname().lower()) == label].pop()
+        print(matches.getPid())
+        return matches.getPid()
 
+    def TakeAPhoto(self, folderPath):
+        cam = VideoCapture(0, cv2.CAP_DSHOW)  # 0 -> index of camera
+        while True:
+            s, img = cam.read()
+            if s:  # frame captured without any errors
+                # check if person already exists
+                if not os.path.exists(folderPath):
+                    os.mkdir(folderPath)
+                # TODO don't work with unicode ((
+                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
+                print(faces)
+                if len(faces) is not 0:
+                    print("Photo is done")
+                    imwrite(os.path.join(folderPath, str(uuid.uuid4()) + '.png'), img)
+                    break
+        cam.release()
+        cv2.destroyAllWindows()

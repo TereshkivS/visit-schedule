@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import OpenCvManager
-
+import StudentDataBaseProcessor
 from RegisterMenu import Ui_RegisterWindow
 
 
@@ -62,6 +62,10 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        # create opencv stuff
+        self.OpenCvManager = OpenCvManager.OpenCvManager()
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -73,13 +77,12 @@ class Ui_MainWindow(object):
 
     # TODO add some code
     def StartMonitoring(self):
-        monitoring = OpenCvManager.OpenCvManager()
-        monitoring.StartMonitoring()
+        self.OpenCvManager.StartMonitoring()
 
     def OpenRegisterStudentWindow(self):
         self.registerWindow = QtWidgets.QMainWindow()
         self.registerWindowUI = Ui_RegisterWindow()
-        self.registerWindowUI.setupUi(self.registerWindow)
+        self.registerWindowUI.setupUi(self.registerWindow, self.OpenCvManager)
         self.registerWindow.show()
         #MainWindow.setDisabled(True)
 

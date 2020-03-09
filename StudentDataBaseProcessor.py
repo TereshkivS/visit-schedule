@@ -10,7 +10,7 @@ class DataBaseProcessor():
         self.listOfStudent.append(student)
 
     def SerializeDataBase(self):
-        with open("data_file.json", "w") as write_to_json_file:
+        with open("data_file.json", "a") as write_to_json_file:
             write_to_json_file.write(json.dumps(self.listOfStudent, default=convert_to_dict, indent=4, sort_keys=True))
             #for i in self.listOfStudent:
                 #write_to_json_file.write(json.dumps(i, default=convert_to_dict, indent=4, sort_keys=True))
@@ -21,10 +21,6 @@ class DataBaseProcessor():
             listofstudents=json.loads(read_from_json_file.read(), object_hook=dict_to_obj)
             print(listofstudents)
             print(type(listofstudents))
-            # TODO insert in current id code
-            matches = [x for x in listofstudents if x.getSurname() == "koko"].pop()
-            print(matches.getName())
-
             return listofstudents
 
 def convert_to_dict(obj):

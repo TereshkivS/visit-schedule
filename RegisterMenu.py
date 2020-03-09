@@ -13,7 +13,7 @@ import uuid
 
 
 class Ui_RegisterWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, OpenCvManager):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(620, 492)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -134,6 +134,9 @@ class Ui_RegisterWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.OpenCvManager = OpenCvManager
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "RegisterStudentWindow"))
@@ -162,7 +165,7 @@ class Ui_RegisterWindow(object):
     def Register(self):
         student = Student(name=self.firstNameLine.text(),
                           surname=self.secondNameLine.text(),
-                          pid=str(uuid.uuid4()),
+                          pid=str(uuid.uuid4())[:4],
                           institute=self.instituteLine.text(),
                           profession=self.professionLine.text(),
                           group=self.groupLine.text(),
@@ -171,8 +174,9 @@ class Ui_RegisterWindow(object):
                           gpa=self.gpaLine.text())
         # TODO maybe move next line to ctor
         manager = RegisterMenuManager(student)
-        manager.RegisterInDataBase()
-        manager.TakeAPhoto()
+        self.OpenCvManager.TakeAPhoto(manager.GetFolderPath())
+        manager.RegisterInDataBase(self.OpenCvManager)
+
 
 
 if __name__ == "__main__":
