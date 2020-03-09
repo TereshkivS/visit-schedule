@@ -125,9 +125,10 @@ class OpenCvManager:
         recognizer.save("train.yml")
 
     def GetUuidByName(self, label, listofstudents):
-        matches = [x for x in listofstudents if (x.getName().lower() + x.getSurname().lower()) == label].pop()
-        print(matches.getPid())
-        return matches.getPid()
+        # todo hanle if is not matches
+        matches = next(item for item in listofstudents if item["name"].lower() + item["surname"].lower() == label)
+        print("Matches = " + matches["pid"])
+        return matches["pid"]
 
     def TakeAPhoto(self, folderPath):
         cam = VideoCapture(0, cv2.CAP_DSHOW)  # 0 -> index of camera

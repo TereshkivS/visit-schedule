@@ -135,6 +135,8 @@ class Ui_RegisterWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.OpenCvManager = OpenCvManager
+        self.manager = RegisterMenuManager()
+
 
 
     def retranslateUi(self, MainWindow):
@@ -172,10 +174,9 @@ class Ui_RegisterWindow(object):
                           educationalLevel=self.edLevelComboBox.currentText(),
                           age=self.ageLine.text(),
                           gpa=self.gpaLine.text())
-        # TODO maybe move next line to ctor
-        manager = RegisterMenuManager(student)
-        self.OpenCvManager.TakeAPhoto(manager.GetFolderPath())
-        manager.RegisterInDataBase(self.OpenCvManager)
+        self.manager.CalculateFolerPath(student)
+        self.OpenCvManager.TakeAPhoto(self.manager.GetFolderPath())
+        self.manager.RegisterInDataBase(self.OpenCvManager, student)
 
 
 
