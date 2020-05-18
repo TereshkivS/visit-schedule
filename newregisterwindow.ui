@@ -16,11 +16,14 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
+     <widget class="QComboBox" name="comboBox"/>
+    </item>
+    <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Please fill in registration form</string>
+         <string>Fill in registration</string>
         </property>
        </widget>
       </item>
@@ -29,7 +32,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Enter first name</string>
+           <string>First name</string>
           </property>
          </widget>
         </item>
@@ -47,7 +50,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Enter second name</string>
+           <string>Second name</string>
           </property>
          </widget>
         </item>
@@ -68,7 +71,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Enter institute name</string>
+           <string>Department</string>
           </property>
          </widget>
         </item>
@@ -79,115 +82,6 @@
           </property>
           <property name="placeholderText">
            <string>e.g. IKNI</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Enter type of profession</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="professionLine">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="placeholderText">
-           <string>e.g. Computer scientist</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Enter group name</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="groupLine">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="placeholderText">
-           <string>e.g. KN-412</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Choose educational level</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="edLevelComboBox">
-          <item>
-           <property name="text">
-            <string>Master</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Bachelor</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
-        <item>
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Enter student age</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="ageLine">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="placeholderText">
-           <string>e.g. 19</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <item>
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Enter grade point average</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="gpaLine">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="placeholderText">
-           <string>e.g. 82.5</string>
           </property>
          </widget>
         </item>
@@ -223,7 +117,7 @@
      <x>0</x>
      <y>0</y>
      <width>620</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
