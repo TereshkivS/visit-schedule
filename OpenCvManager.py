@@ -1,3 +1,5 @@
+from builtins import print
+
 import cv2
 from cv2 import *
 import pickle
@@ -55,7 +57,9 @@ class OpenCvManager:
                 # TODO if TimeToLive is not new read from recognizer
                 id_, conf = recognizer.predict(roi_gray)
                 if conf >= 45 and conf <= 85:
+                    print("COnf = " + str(conf))
                     labels = self.ReverseLabels(self.LoadNameLabels())
+                    print(id_)
                     label = labels[id_]
                     self.SetTextAroundFace(frame, x, y, id_, label)
                     self.DrawRectangleAroundFaces(frame, x, y, w, h)
@@ -132,7 +136,7 @@ class OpenCvManager:
                 return x.pid
         # matches = next(item for item in listofstudents if item["name"].lower() + item["surname"].lower() == label)
         # print("Matches = " + matches["pid"])
-        print("GetUuidByName crashed because it was no same label in list of students")
+        print("GetUuidByName crashed because i  t was no same label in list of students")
         return 0
 
     def TakeAPhoto(self, folderPath):
