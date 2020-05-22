@@ -10,10 +10,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from RegisterMenuManager import RegisterMenuManager
 from Student import Student
+from random import seed
+from random import randint
 import uuid
+import DataBase
 
 class Ui_RegisterWindow(object):
-    def setupUi(self, MainWindow, OpenCvManager):
+    def setupUi(self, MainWindow, OpenCvManager, DBManager):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(620, 492)
 
@@ -90,6 +93,10 @@ class Ui_RegisterWindow(object):
         self.OpenCvManager = OpenCvManager
         self.manager = RegisterMenuManager()
 
+        self.dataBaseManager = DBManager
+        # seed random integer generator
+        seed(1)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "RegisterStudentWindow"))
@@ -104,7 +111,44 @@ class Ui_RegisterWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
 
     def Register(self):
-        pass
+        currentItem = self.comboBox.currentText()
+        if currentItem == "Викладач":
+            self.ReadDataFromTeacherField()
+            pass
+        elif currentItem == "Працівник":
+            self.ReadDataFromWorkerField()
+            pass
+        elif currentItem == "Студент":
+            self.ReadDataFromStudentField()
+            pass
+
+    def ReadDataFromWorkerField(self):
+        try:
+            self.dataBaseManager.AddWorkerToDB(pid=randint(0, 999999),
+                                               name=self.firstNameLine.text(),
+                                               surname=self.secondNameLine.text(),
+                                               department=self.instituteLine.text())
+        except:
+            print("Cannot register person in database. Please try again")
+
+
+
+
+    def ReadDataFromStudentField(self):
+        self.dataBaseManager.AddStudentToDB(pid=randint(0, 999999),
+                                            name=self.firstNameLine.text(),
+                                            surname=self.secondNameLine.text(),
+                                            group=self.groupLine.text())
+        self.instituteLine.text()
+
+
+    def ReadDataFromTeacherField(self):
+        self.dataBaseManager.AddTeacherToDB(pid=randint(0, 999999),
+                                            name=self.firstNameLine.text(),
+                                            surname=self.secondNameLine.text(),
+                                            department=self.instituteLine.text(),
+                                            profession=self.professionLine.text())
+
 
     def ChangeUi(self):
         currentItem = self.comboBox.currentText()

@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import OpenCvManager
 import StudentDataBaseProcessor
 from RegisterMenu import Ui_RegisterWindow
+import DataBase
 
 
 class Ui_MainWindow(object):
@@ -29,9 +30,18 @@ class Ui_MainWindow(object):
         self.registerButton = QtWidgets.QPushButton(self.centralwidget)
         self.registerButton.setObjectName("registerButton")
         self.verticalLayout.addWidget(self.registerButton)
+
+        self.horizontalLayoutForMonitoring = QtWidgets.QHBoxLayout()
+        self.enterCheckBox = QtWidgets.QCheckBox("На вхід")
+        self.exitCheckBox = QtWidgets.QCheckBox("На вихід")
         self.monitoringButton = QtWidgets.QPushButton(self.centralwidget)
         self.monitoringButton.setObjectName("monitoringButton")
+        self.horizontalLayoutForMonitoring.addWidget(self.enterCheckBox)
+        self.horizontalLayoutForMonitoring.addWidget(self.exitCheckBox)
+        self.verticalLayout.addLayout(self.horizontalLayoutForMonitoring)
+
         self.verticalLayout.addWidget(self.monitoringButton)
+
         self.listButton = QtWidgets.QPushButton(self.centralwidget)
         self.listButton.setObjectName("listButton")
         self.verticalLayout.addWidget(self.listButton)
@@ -56,6 +66,8 @@ class Ui_MainWindow(object):
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
         # connect to slots
+        #self.enterCheckBox.toggled()
+
         self.monitoringButton.clicked.connect(self.StartMonitoring)
         self.registerButton.clicked.connect(self.OpenRegisterStudentWindow)
 
@@ -64,6 +76,9 @@ class Ui_MainWindow(object):
 
         # create opencv stuff
         self.OpenCvManager = OpenCvManager.OpenCvManager()
+
+        # create db stuff
+        self.DBManager = DataBase.DataBase()
 
 
     def retranslateUi(self, MainWindow):
@@ -82,7 +97,7 @@ class Ui_MainWindow(object):
     def OpenRegisterStudentWindow(self):
         self.registerWindow = QtWidgets.QMainWindow()
         self.registerWindowUI = Ui_RegisterWindow()
-        self.registerWindowUI.setupUi(self.registerWindow, self.OpenCvManager)
+        self.registerWindowUI.setupUi(self.registerWindow, self.OpenCvManager, self.DBManager)
         self.registerWindow.show()
         #MainWindow.setDisabled(True)
 
