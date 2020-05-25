@@ -39,7 +39,7 @@ class OpenCvManager:
     def ReadFromFileToRecognizer(self, recognizer):
         recognizer.read("train.yml")
 
-    def StartMonitoring(self):
+    def StartMonitoring(self, DBManager, isEnterMode):
         cap = cv2.VideoCapture(0)
         recognizer = self.CreateRecognizer()
         self.ReadFromFileToRecognizer(recognizer)
@@ -59,10 +59,17 @@ class OpenCvManager:
                 if conf >= 45 and conf <= 85:
                     print("COnf = " + str(conf))
                     labels = self.ReverseLabels(self.LoadNameLabels())
+
                     print(id_)
+                    if isEnterMode:
+                        DBManager.FixPersonsEnter(id_)
+                    else:
+                        DBManager.FixPersonsExit(id_)
+
                     label = labels[id_]
                     self.SetTextAroundFace(frame, x, y, id_, label)
                     self.DrawRectangleAroundFaces(frame, x, y, w, h)
+
                 # todo write roi into file
 
             cv2.imshow('Video', frame)
@@ -88,7 +95,7 @@ class OpenCvManager:
         # dictionary " name : id "
         label_ids = self.LoadNameLabels()
         print(label_ids)
-        listOfStudents = dataBase.listOfStudent
+        listOfStudents = dataBase.GetListOfPersons()
         #listOfStudents = dataBase.DeserializeDataBase()
         # 2 dimential array of detected faces
         x_train = []
@@ -99,8 +106,8 @@ class OpenCvManager:
                     path = os.path.join(root, file)
                     label = os.path.basename(root).replace(" ", "_").lower()
                     if not label in label_ids:
-                        clearstruui = self.GetUuidByName(label, listOfStudents).replace('-', '')
-                        current_id = int(clearstruui, base=16)
+                        current_id = self.GetUuidByName(label, listOfStudents)
+                        #current_id = int(clearstruui, base=16)
                         print(current_id)
                         label_ids[label] = current_id
                     # set current id
@@ -131,16 +138,18 @@ class OpenCvManager:
 
     def GetUuidByName(self, label, listofstudents):
         # todo hanle if is not matches
+        # 0 - pid, 1 - name, 2 - surname
         for x in listofstudents:
-            if x.name.lower() + x.surname.lower() == label:
-                return x.pid
+            if x[1].lower() + x[2].lower() == label:
+                return x[0]
         # matches = next(item for item in listofstudents if item["name"].lower() + item["surname"].lower() == label)
         # print("Matches = " + matches["pid"])
-        print("GetUuidByName crashed because i  t was no same label in list of students")
+        print("GetUuidByName crashed because it was no same label in list of students")
         return 0
 
     def TakeAPhoto(self, folderPath):
         cam = VideoCapture(0, cv2.CAP_DSHOW)  # 0 -> index of camera
+        amountOfFaces=0
         while True:
             s, img = cam.read()
             if s:  # frame captured without any errors
@@ -154,6 +163,9 @@ class OpenCvManager:
                 if len(faces) is not 0:
                     print("Photo is done")
                     imwrite(os.path.join(folderPath, str(uuid.uuid4()) + '.png'), img)
-                    break
+                    amountOfFaces = amountOfFaces + 1
+                    if amountOfFaces == 10:
+                        print("All 10 photos are done")
+                        break
         cam.release()
         cv2.destroyAllWindows()

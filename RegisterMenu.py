@@ -5,13 +5,11 @@
 # Created by: PyQt5 UI code generator 5.14.0
 #
 # WARNING! All changes made in this file will be lost!
-
+import random
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from RegisterMenuManager import RegisterMenuManager
 from Student import Student
-from random import seed
-from random import randint
 import uuid
 import DataBase
 
@@ -94,8 +92,7 @@ class Ui_RegisterWindow(object):
         self.manager = RegisterMenuManager()
 
         self.dataBaseManager = DBManager
-        # seed random integer generator
-        seed(1)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -107,48 +104,66 @@ class Ui_RegisterWindow(object):
         self.secondNameLine.setPlaceholderText(_translate("MainWindow", "e.g. Snow"))
         self.label_4.setText(_translate("MainWindow", "Кафедра"))
         self.instituteLine.setPlaceholderText(_translate("MainWindow", "e.g. IKNI"))
-        self.registerButton.setText(_translate("MainWindow", "Register"))
+        self.registerButton.setText(_translate("MainWindow", "Занести у базу даних"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
 
     def Register(self):
         currentItem = self.comboBox.currentText()
+        isSucessfullyRegistered = False
         if currentItem == "Викладач":
-            self.ReadDataFromTeacherField()
-            pass
+            while not isSucessfullyRegistered:
+                isSucessfullyRegistered = self.ReadDataFromTeacherField()
+                pass
         elif currentItem == "Працівник":
-            self.ReadDataFromWorkerField()
-            pass
+            while not isSucessfullyRegistered:
+                isSucessfullyRegistered=self.ReadDataFromWorkerField()
+                pass
         elif currentItem == "Студент":
-            self.ReadDataFromStudentField()
-            pass
+            while not isSucessfullyRegistered:
+                isSucessfullyRegistered=self.ReadDataFromStudentField()
+                pass
+        self.manager.CalculateFolerPath(self.firstNameLine.text(), self.secondNameLine.text())
+        self.OpenCvManager.TakeAPhoto(self.manager.GetFolderPath())
+        self.OpenCvManager.TrainPhotos(self.dataBaseManager)
+
 
     def ReadDataFromWorkerField(self):
         try:
-            self.dataBaseManager.AddWorkerToDB(pid=randint(0, 999999),
+            self.dataBaseManager.AddWorkerToDB(pid=random.randint(0, 999999),
                                                name=self.firstNameLine.text(),
                                                surname=self.secondNameLine.text(),
                                                department=self.instituteLine.text())
+            return True
         except:
             print("Cannot register person in database. Please try again")
+            return  False
 
 
 
 
     def ReadDataFromStudentField(self):
-        self.dataBaseManager.AddStudentToDB(pid=randint(0, 999999),
-                                            name=self.firstNameLine.text(),
-                                            surname=self.secondNameLine.text(),
-                                            group=self.groupLine.text())
-        self.instituteLine.text()
-
+        try:
+            self.dataBaseManager.AddStudentToDB(pid=random.randint(0, 999999),
+                                                name=self.firstNameLine.text(),
+                                                surname=self.secondNameLine.text(),
+                                                group=self.groupLine.text())
+            self.instituteLine.text()
+            return True
+        except:
+            print("Cannot register person in database. Please try again")
+            return False
 
     def ReadDataFromTeacherField(self):
-        self.dataBaseManager.AddTeacherToDB(pid=randint(0, 999999),
-                                            name=self.firstNameLine.text(),
-                                            surname=self.secondNameLine.text(),
-                                            department=self.instituteLine.text(),
-                                            profession=self.professionLine.text())
-
+        try:
+            self.dataBaseManager.AddTeacherToDB(pid=random.randint(0, 999999),
+                                                name=self.firstNameLine.text(),
+                                                surname=self.secondNameLine.text(),
+                                                department=self.instituteLine.text(),
+                                                profession=self.professionLine.text())
+            return True
+        except:
+            print("Cannot register person in database. Please try again")
+            return False
 
     def ChangeUi(self):
         currentItem = self.comboBox.currentText()

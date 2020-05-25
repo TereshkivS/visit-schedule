@@ -11,6 +11,7 @@ import OpenCvManager
 import StudentDataBaseProcessor
 from RegisterMenu import Ui_RegisterWindow
 import DataBase
+from ShowListMenu import Ui_ShowListWindow
 
 
 class Ui_MainWindow(object):
@@ -45,9 +46,9 @@ class Ui_MainWindow(object):
         self.listButton = QtWidgets.QPushButton(self.centralwidget)
         self.listButton.setObjectName("listButton")
         self.verticalLayout.addWidget(self.listButton)
-        self.cameraOnlineLabel = QtWidgets.QLabel(self.centralwidget)
-        self.cameraOnlineLabel.setObjectName("cameraOnlineLabel")
-        self.verticalLayout.addWidget(self.cameraOnlineLabel)
+        #self.cameraOnlineLabel = QtWidgets.QLabel(self.centralwidget)
+        #self.cameraOnlineLabel.setObjectName("cameraOnlineLabel")
+        #self.verticalLayout.addWidget(self.cameraOnlineLabel)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.video = QtWidgets.QWidget(self.centralwidget)
         self.video.setObjectName("video")
@@ -70,6 +71,7 @@ class Ui_MainWindow(object):
 
         self.monitoringButton.clicked.connect(self.StartMonitoring)
         self.registerButton.clicked.connect(self.OpenRegisterStudentWindow)
+        self.listButton.clicked.connect(self.OpenResultListWindow)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -84,15 +86,16 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.registerButton.setText(_translate("MainWindow", "Register Student"))
-        self.monitoringButton.setText(_translate("MainWindow", "Start monitoring"))
-        self.listButton.setText(_translate("MainWindow", "Show lists of students"))
-        self.cameraOnlineLabel.setText(_translate("MainWindow", "Camera online:"))
+        self.registerButton.setText(_translate("MainWindow", "Занесення особистих даних"))
+        self.monitoringButton.setText(_translate("MainWindow", "Почати моніторинг"))
+        self.listButton.setText(_translate("MainWindow", "Вивести результати"))
+        #self.cameraOnlineLabel.setText(_translate("MainWindow", "Camera online:"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
 
     # TODO add some code
     def StartMonitoring(self):
-        self.OpenCvManager.StartMonitoring()
+        isEnterMode = self.enterCheckBox.isChecked()
+        self.OpenCvManager.StartMonitoring(self.DBManager, isEnterMode)
 
     def OpenRegisterStudentWindow(self):
         self.registerWindow = QtWidgets.QMainWindow()
@@ -101,6 +104,11 @@ class Ui_MainWindow(object):
         self.registerWindow.show()
         #MainWindow.setDisabled(True)
 
+    def OpenResultListWindow(self):
+        self.listResultWindow = QtWidgets.QMainWindow()
+        self.listResultWindowUI = Ui_ShowListWindow()
+        self.listResultWindowUI.setupUi(self.listResultWindow, self.DBManager)
+        self.listResultWindow.show()
 
 
 class RegisterWindow():

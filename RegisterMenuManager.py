@@ -20,6 +20,6 @@ class RegisterMenuManager:
     def GetFolderPath(self):
         return self.__folderPath
 
-    def CalculateFolerPath(self, student):
-        folderName = student.name.lower()+student.surname.lower()
+    def CalculateFolerPath(self, name, surname):
+        folderName = name.lower()+surname.lower()
         self.__folderPath = os.path.join(self.__images_path, folderName)
