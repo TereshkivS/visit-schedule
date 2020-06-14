@@ -68,7 +68,12 @@ class OpenCvManager:
 
                     label = labels[id_]
                     self.SetTextAroundFace(frame, x, y, id_, label)
-                    self.DrawRectangleAroundFaces(frame, x, y, w, h)
+                    self.DrawGreenRectangleAroundFaces(frame, x, y, w, h)
+                else:
+                    print("Unknown face")
+                    self.SetTextAroundFace(frame, x, y, id_, "Unknown person")
+                    self.DrawRedRectangleAroundFaces(frame,x,y,w,h)
+
 
                 # todo write roi into file
 
@@ -77,8 +82,15 @@ class OpenCvManager:
                 cv2.destroyAllWindows()
                 break
 
-    def DrawRectangleAroundFaces(self, frame, x, y, w, h):
+    def DrawGreenRectangleAroundFaces(self, frame, x, y, w, h):
         color = (0, 255, 0)     # green color
+        stroke = 2
+        end_cord_x = x + w
+        end_cord_y = y + h
+        cv2.rectangle(frame, (x, y), (end_cord_x, end_cord_y), color, stroke)
+
+    def DrawRedRectangleAroundFaces(self, frame, x, y, w, h):
+        color = (0, 0, 255)  # red color
         stroke = 2
         end_cord_x = x + w
         end_cord_y = y + h

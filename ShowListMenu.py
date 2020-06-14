@@ -8,24 +8,43 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from ResultTableUi import Ui_TableResultWindow
 
 class Ui_ShowListWindow(object):
     def setupUi(self, MainWindow, DataBaseManager):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(620, 492)
+        MainWindow.resize(620, 292)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+
+        self.titleLabel = QtWidgets.QLabel(self.centralwidget)
+        self.titleLabel.setText("---Вікно формування запиту---")
+        self.titleLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.verticalLayout_2.addWidget(self.titleLabel)
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.dateTimeEdit = QtWidgets.QDateTimeEdit(self.centralwidget)
-        self.dateTimeEdit.setObjectName("dateTimeEdit")
-        self.verticalLayout.addWidget(self.dateTimeEdit)
+
+        self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
+        self.dateEdit.setObjectName("dateEdit")
+        self.verticalLayout.addWidget(self.dateEdit)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setObjectName("label_3")
+        self.verticalLayout.addWidget(self.label_3)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.timeEditBefore = QtWidgets.QTimeEdit(self.centralwidget)
+        self.timeEditBefore.setObjectName("timeEdit")
+        self.horizontalLayout_2.addWidget(self.timeEditBefore)
+        self.timeEditAfter = QtWidgets.QTimeEdit(self.centralwidget)
+        self.timeEditAfter.setObjectName("timeEdit_2")
+        self.horizontalLayout_2.addWidget(self.timeEditAfter)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.auditory = QtWidgets.QLabel(self.centralwidget)
@@ -55,7 +74,7 @@ class Ui_ShowListWindow(object):
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
         # connect to buttons
-        self.showListButton.clicked.connect(self.PrintPersons)
+        self.showListButton.clicked.connect(self.OpenTableWindow)
         self.retranslateUi(MainWindow)
 
         self.DBManager = DataBaseManager
@@ -64,9 +83,10 @@ class Ui_ShowListWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "RegisterStudentWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "QueryMenu"))
         self.label.setText(_translate("MainWindow", "Виберіть бажану дату та час"))
         self.auditory.setText(_translate("MainWindow", "Аудиторія"))
+        self.label_3.setText(_translate("MainWindow", "Виберіть часові рамки"))
         #self.auditoryLine.setPlaceholderText(_translate("MainWindow", "e.g. IKNI"))
         self.showListButton.setText(_translate("MainWindow", "Показати список присутніх людей"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
@@ -98,3 +118,10 @@ class Ui_ShowListWindow(object):
         self.verticalLayout.addWidget(self.tableWidget)
 
 
+    def OpenTableWindow(self):
+        resultTableList = self.DBManager.GetCurrentVisitorsList(self.dateEdit.date(),
+                                                           self.timeEditBefore.time(), self.timeEditAfter.time())
+        self.tableResultWindow = QtWidgets.QMainWindow()
+        self.tableResultWindowUI = Ui_TableResultWindow()
+        self.tableResultWindowUI.setupUi(MainWindow=self.tableResultWindow, listOfPersons=resultTableList)
+        self.tableResultWindow.show()

@@ -75,6 +75,18 @@ class DataBase():
         self.cursor.execute(sqlQuery, (pid, 1))
         self.connection.commit()
 
+    def CheckIfPersonIsInEnters(self, pid):
+        sqlQuery = ("""
+                    select * from Enters where person_id=?
+                    """)
+        pidList = (pid,)
+        self.cursor.execute(sqlQuery, pidList)
+        results = self.cursor.fetchall()
+        if results:
+            return True
+        else:
+            return False
+
     def GetListOfPersons(self):
         sqlQuery = ("""
                     select * from Persons
@@ -84,10 +96,10 @@ class DataBase():
         print(results)
         return results
 
-    def CheckIfPersonIsInEnters(self, pid):
+    def CheckIfPersonIsInExits(self, pid):
         sqlQuery = ("""
-                    select * from Enters where person_id=?
-                    """)
+                            select * from Exits where person_id=?
+                            """)
         pidList = (pid,)
         self.cursor.execute(sqlQuery, pidList)
         results = self.cursor.fetchall()
@@ -112,33 +124,84 @@ class DataBase():
         else:
             return False
 
+    def IsValidExit(self, pid):
+        sqlQuery = ("""select * from Enters where 
+            enter_date>(select exit_date from Exits 
+            where exit_id=(select max(exit_id) from Exits 
+            where person_id=?))""")
+        pidList = (pid,)
+        self.cursor.execute(sqlQuery, pidList)
+        results = self.cursor.fetchall()
+        print("Result table of IsValidExit" + str(results))
+        if results:
+            return True
+        else:
+            return False
+
     def FixPersonsEnter(self, pid):
         if not self.CheckIfPersonIsInEnters(pid) or self.IsValidEnter(pid):
             self.AddPersonEnter(pid)
+            nameAndSurname = self.GetPersonNames(pid)
+            self.AddToResultEntersExits(nameAndSurname[0])
 
     def FixPersonsExit(self, pid):
-        self.AddPersonExit(pid)
+        if not self.CheckIfPersonIsInExits(pid) or self.IsValidExit(pid):
+            self.AddPersonExit(pid)
+            nameAndSurname = self.GetPersonNames(pid)
+            self.AppendToResultEntersExits(nameAndSurname[0])
 
-    def GetCurrentVisitorsList(self, date, time):
-        dateTimeString = str(date.year()) + "-" + str(date.month()) + \
-                         "-" + str(date.day()) + " " + str(time.hour()) \
-                         + ":" + str(time.minute()) + ":" + str(time.second())
-        print(dateTimeString)
+    def GetCurrentVisitorsList(self, date, timeBefore, timeAfter):
+        dateTimeStringBefore = str(date.year()) + "-" + str(date.month()) + \
+                         "-" + str(date.day()) + " " + str(timeBefore.hour()) \
+                         + ":" + str(timeBefore.minute()) + ":" + str(timeBefore.second())
+        dateTimeStringAfter = str(date.year()) + "-" + str(date.month()) + \
+                               "-" + str(date.day()) + " " + str(timeAfter.hour()) \
+                               + ":" + str(timeAfter.minute()) + ":" + str(timeAfter.second())
+        print("Before date = " + dateTimeStringBefore)
+        print("After date = " + dateTimeStringAfter)
         #sqlQuery = ("""
         #select person_id from Enters where enter_date>?
         #""")
         sqlQuery = ("""
-        select first_name, last_name
-        from Persons where
-        person_id in (select person_id from Enters where enter_date > ?)""")
-        self.cursor.execute(sqlQuery, (dateTimeString,))
+        select * from ResultEntersExits where (enter_date > ? and exit_date < ?) or (enter_date > ? )""")
+        self.cursor.execute(sqlQuery, (dateTimeStringBefore, dateTimeStringAfter, dateTimeStringBefore))
         results = self.cursor.fetchall()
+        print("Result query table")
+        print(results)
         return results
 
+    def GetPersonNames(self, pid):
+        sqlQuery = ("""
+                select first_name, last_name
+                from Persons where person_id = ?
+                        """)
+        pidList = (pid,)
+        self.cursor.execute(sqlQuery, pidList)
+        results = self.cursor.fetchall()
+        print(results)
+        return results
 
+    def AddToResultEntersExits(self, nameAndSurname):
+        sqlQuery = ("""
+        insert ResultEntersExits 
+        (first_name, last_name, enter_date)
+        values
+        (?, ?, GETDATE())""")
+        self.cursor.execute(sqlQuery, (nameAndSurname[0], nameAndSurname[1]))
+        self.connection.commit()
+
+    def AppendToResultEntersExits(self, nameAndSurname):
+        sqlQuery = ("""
+        update ResultEntersExits
+        set exit_date = GETDATE()
+        where table_id=(select max(table_id) from ResultEntersExits
+        where first_name=? and last_name=?)
+        """)
+        self.cursor.execute(sqlQuery, (nameAndSurname[0], nameAndSurname[1]))
+        self.connection.commit()
 
 if __name__ == "__main__":
     db = DataBase()
     db.GetListOfPersons()
 
-    #db.AddPersonExit(577055)
+    #db.GetPersonNames(676251)

@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         #standart settings
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(618, 479)
+        MainWindow.resize(418, 279)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -28,13 +28,23 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+
+        self.titleLabel = QtWidgets.QLabel(self.centralwidget)
+        self.titleLabel.setText("---Вікно адміністратора---")
+        #self.titleLabel.setText("---Вікно працівника---")
+        self.titleLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.verticalLayout.addWidget(self.titleLabel)
+
         self.registerButton = QtWidgets.QPushButton(self.centralwidget)
         self.registerButton.setObjectName("registerButton")
         self.verticalLayout.addWidget(self.registerButton)
 
+        spacerItem = QtWidgets.QSpacerItem(5, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+
         self.horizontalLayoutForMonitoring = QtWidgets.QHBoxLayout()
-        self.enterCheckBox = QtWidgets.QCheckBox("На вхід")
-        self.exitCheckBox = QtWidgets.QCheckBox("На вихід")
+        self.enterCheckBox = QtWidgets.QCheckBox("Вхід у приміщення")
+        self.exitCheckBox = QtWidgets.QCheckBox("Вихід з приміщення")
         self.monitoringButton = QtWidgets.QPushButton(self.centralwidget)
         self.monitoringButton.setObjectName("monitoringButton")
         self.horizontalLayoutForMonitoring.addWidget(self.enterCheckBox)
@@ -42,6 +52,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayoutForMonitoring)
 
         self.verticalLayout.addWidget(self.monitoringButton)
+
+        self.verticalLayout.addItem(spacerItem)
 
         self.listButton = QtWidgets.QPushButton(self.centralwidget)
         self.listButton.setObjectName("listButton")
@@ -52,7 +64,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.video = QtWidgets.QWidget(self.centralwidget)
         self.video.setObjectName("video")
-        self.verticalLayout_2.addWidget(self.video)
+        #self.verticalLayout_2.addWidget(self.video)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)

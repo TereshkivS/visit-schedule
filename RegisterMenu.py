@@ -16,12 +16,18 @@ import DataBase
 class Ui_RegisterWindow(object):
     def setupUi(self, MainWindow, OpenCvManager, DBManager):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(620, 492)
+        MainWindow.resize(620, 230)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+
+        self.titleLabel = QtWidgets.QLabel(self.centralwidget)
+        self.titleLabel.setText("---Вікно реєстрації---")
+        self.titleLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.verticalLayout_2.addWidget(self.titleLabel)
+
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItem("Працівник")
@@ -97,13 +103,13 @@ class Ui_RegisterWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "RegisterStudentWindow"))
-        self.label.setText(_translate("MainWindow", "Будь ласка заповність форму реєстрації"))
-        self.label_2.setText(_translate("MainWindow", "Ім\'я"))
-        self.firstNameLine.setPlaceholderText(_translate("MainWindow", "e.g. Sam"))
-        self.label_3.setText(_translate("MainWindow", "Прізвище"))
-        self.secondNameLine.setPlaceholderText(_translate("MainWindow", "e.g. Snow"))
-        self.label_4.setText(_translate("MainWindow", "Кафедра"))
-        self.instituteLine.setPlaceholderText(_translate("MainWindow", "e.g. IKNI"))
+        self.label.setText(_translate("MainWindow", "Будь ласка заповність форму реєстрації\nПоля із * є обов\'язковими"))
+        self.label_2.setText(_translate("MainWindow", "* Ім\'я"))
+        self.firstNameLine.setPlaceholderText(_translate("MainWindow", "Петро"))
+        self.label_3.setText(_translate("MainWindow", "* Прізвище"))
+        self.secondNameLine.setPlaceholderText(_translate("MainWindow", "Шухевич"))
+        self.label_4.setText(_translate("MainWindow", "Інститут"))
+        self.instituteLine.setPlaceholderText(_translate("MainWindow", "ІКНІ"))
         self.registerButton.setText(_translate("MainWindow", "Занести у базу даних"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
 
@@ -124,6 +130,15 @@ class Ui_RegisterWindow(object):
                 pass
         self.manager.CalculateFolerPath(self.firstNameLine.text(), self.secondNameLine.text())
         self.OpenCvManager.TakeAPhoto(self.manager.GetFolderPath())
+
+        self.successedMakingPhotos = QtWidgets.QMessageBox()
+        self.successedMakingPhotos.setIcon(QtWidgets.QMessageBox.Information)
+        self.successedMakingPhotos.setText("Фото особи було зроблено успішно!")
+        self.successedMakingPhotos.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        self.successedMakingPhotos.setWindowTitle("Інформаційне вікно системи")
+        self.successedMakingPhotos.exec_()
+
+
         self.OpenCvManager.TrainPhotos(self.dataBaseManager)
 
 
@@ -198,6 +213,7 @@ class Ui_RegisterWindow(object):
         self.professionLine = QtWidgets.QLineEdit(self.centralwidget)
         self.professionLine.setText("")
         self.professionLine.setObjectName("professionLine")
+        self.professionLine.setPlaceholderText("Професор")
         self.horizontalLayout_4.addWidget(self.professionLine)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.label_5.setText("Посада")
@@ -211,6 +227,7 @@ class Ui_RegisterWindow(object):
         self.groupLine = QtWidgets.QLineEdit(self.centralwidget)
         self.groupLine.setText("")
         self.groupLine.setObjectName("groupLine")
+        self.groupLine.setPlaceholderText("КН-412")
         self.horizontalLayout_5.addWidget(self.groupLine)
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         self.label_6.setText("Група")
