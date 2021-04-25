@@ -85,7 +85,7 @@ class Ui_ShowListWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "QueryMenu"))
         self.label.setText(_translate("MainWindow", "Виберіть дату"))
-        self.auditory.setText(_translate("MainWindow", "Виберіть аудиторія"))
+        self.auditory.setText(_translate("MainWindow", "Виберіть приміщення"))
         self.label_3.setText(_translate("MainWindow", "Оберіть часові межі"))
         #self.auditoryLine.setPlaceholderText(_translate("MainWindow", "e.g. IKNI"))
         self.showListButton.setText(_translate("MainWindow", "Показати список присутніх людей"))

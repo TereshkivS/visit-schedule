@@ -75,6 +75,6 @@ class Ui_TableResultWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "RegisterStudentWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "RegisterWorkerWindow"))
         self.label.setText(_translate("MainWindow", "---Вікно зареєстрованих осіб---"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

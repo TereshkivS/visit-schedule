@@ -102,14 +102,14 @@ class Ui_RegisterWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "RegisterStudentWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "RegisterWorkerWindow"))
         self.label.setText(_translate("MainWindow", "Будь ласка заповність форму реєстрації\nПоля із * є обов\'язковими"))
         self.label_2.setText(_translate("MainWindow", "* Ім\'я"))
         self.firstNameLine.setPlaceholderText(_translate("MainWindow", "Петро"))
         self.label_3.setText(_translate("MainWindow", "* Прізвище"))
         self.secondNameLine.setPlaceholderText(_translate("MainWindow", "Шухевич"))
-        self.label_4.setText(_translate("MainWindow", "Інститут"))
-        self.instituteLine.setPlaceholderText(_translate("MainWindow", "ІКНІ"))
+        self.label_4.setText(_translate("MainWindow", "Відділення"))
+        self.instituteLine.setPlaceholderText(_translate("MainWindow", "Планово-економічне"))
         self.registerButton.setText(_translate("MainWindow", "Занести у базу даних"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
 
