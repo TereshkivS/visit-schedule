@@ -9,11 +9,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import DataBase
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        self.db = DataBase.DataBase()
+
+        MainWindow.setObjectName("MakePersonInfectedWindow")
+        MainWindow.resize(400, 300)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.formLayout = QtWidgets.QFormLayout(self.centralwidget)
@@ -23,9 +26,15 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
+
+        persons = self.db.GetListOfPersons()
+        namesList = [person[1] + " " + person[2] for person in persons]
+
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItems(namesList)
         self.horizontalLayout.addWidget(self.comboBox)
+
         self.formLayout.setLayout(1, QtWidgets.QFormLayout.LabelRole, self.horizontalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -62,12 +71,14 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MakePersonInfectedWindow"))
         self.label.setText(_translate("MainWindow", "Вибрати працівника"))
         self.label_2.setText(_translate("MainWindow", "Введіть назву інфекції"))
         self.pushButton.setText(_translate("MainWindow", "Зробити працівника здоровим"))
         self.pushButton_2.setText(_translate("MainWindow", "Зробити працівника інфікованим"))
         self.label_3.setText(_translate("MainWindow", "--- Вікно редагування медичної історії працівника ---"))
+
+
 
 
 if __name__ == "__main__":
